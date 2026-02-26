@@ -10,8 +10,8 @@ int input_pot_led; //how frequent led blinks (ms);
 const int EnA = 3; // Enable pin for motor
 
 // below for btn debounce
-byte last_btn_state = LOW; // previous btn state
-byte btn_state = LOW; // current btn state
+bool last_btn_state = LOW; // previous btn state
+bool btn_state = LOW; // current btn state
 unsigned long btn_deb = 100; // delay for debounce
 unsigned long last_btn_deb = 0; // last debounce time
 bool btn_toggle = false; // controls the on and off components
