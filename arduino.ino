@@ -66,11 +66,6 @@ void btn_buzz_servo() { // action upon btn click
   }
 }
 
-void sound_sense() {
-  sound_read = analogRead(sound);
-  //Serial.println(sound_read);
-}
-
 void led_control() {
   if (btn_toggle) {
     digitalWrite(led, HIGH);
