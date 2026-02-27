@@ -1,13 +1,11 @@
 const int btn = 7; //btn pin
 const int buzz = 8; //buzz pin
 const int pot = A1; // potentiometer pin
-const int motorIn1 = 5; // motor pin
-const int motorIn2 = 6; // motor pin
-const int led = 4; //led pin
+const int led = 3; //led pin
+const int led_sound = 5; //led pin 2
+const int sound = A0;
+int sound_read;
 int input_pot_servo; //values for pot according to set range for servo
-int input_pot_motor; //values for pot according to set range for motor
-int input_pot_led; //how frequent led blinks (ms);
-const int EnA = 3; // Enable pin for motor
 
 // below for btn debounce
 bool last_btn_state = LOW; // previous btn state
@@ -16,6 +14,7 @@ unsigned long btn_deb = 100; // delay for debounce
 unsigned long last_btn_deb = 0; // last debounce time
 bool btn_toggle = false; // controls the on and off components
 
+
 #include <Servo.h>
 Servo myservo;
 
@@ -23,12 +22,8 @@ void setup() {
   pinMode(btn, INPUT);
   pinMode(buzz, OUTPUT);
   pinMode(pot, INPUT);
-  pinMode(motorIn1, OUTPUT);
-  pinMode(motorIn2, OUTPUT);
+  pinMode(sound, INPUT);
   pinMode(led, OUTPUT);
-  pinMode(EnA, OUTPUT);
-  digitalWrite(motorIn1, LOW);
-  digitalWrite(motorIn2, HIGH);
   myservo.attach(9); // servo motor pin
   Serial.begin(9600);
 }
@@ -52,16 +47,12 @@ void btn_press() {
 }
 
 void pot_func(){
-  Serial.println(input_pot_motor);
   if (btn_toggle)
   {
     int pot_val = analogRead(pot);
-    input_pot_motor = map(pot_val, 0, 1023, 0, 255);
     input_pot_servo = map(pot_val, 0, 1023, 0, 90);
-    input_pot_led = map(pot_val, 0, 1023, 0, 1000);
   } 
   else{
-    input_pot_motor = 0;
     input_pot_servo = 0;
   }
 }
@@ -79,14 +70,9 @@ void btn_buzz_servo() { // action upon btn click
   }
 }
 
-void motor_control(){
-  if (btn_toggle) {
-    analogWrite(EnA, input_pot_motor);
-  }
-  else{
-    analogWrite(EnA, 0);
-  }
-  
+void sound_sense() {
+  sound_read = analogRead(sound);
+  //Serial.println(sound_read);
 }
 
 void led_control() {
@@ -95,11 +81,19 @@ void led_control() {
   } else{
   	digitalWrite(led, LOW);
   }
+  if (btn_toggle){
+    digitalWrite(led_sound, HIGH);
+    delay(1000);
+  } else {
+    digitalWrite(led_sound, LOW);
+  }
 }
+
+
 void loop() {
   btn_press();
   pot_func();
+  sound_sense();
   btn_buzz_servo();
-  motor_control();
   led_control();
 }
