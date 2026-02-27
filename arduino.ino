@@ -2,9 +2,6 @@ const int btn = 7; //btn pin
 const int buzz = 8; //buzz pin
 const int pot = A1; // potentiometer pin
 const int led = 3; //led pin
-const int led_sound = 5; //led pin 2
-const int sound = A0;
-int sound_read;
 int input_pot_servo; //values for pot according to set range for servo
 
 // below for btn debounce
@@ -22,7 +19,6 @@ void setup() {
   pinMode(btn, INPUT);
   pinMode(buzz, OUTPUT);
   pinMode(pot, INPUT);
-  pinMode(sound, INPUT);
   pinMode(led, OUTPUT);
   myservo.attach(9); // servo motor pin
   Serial.begin(9600);
@@ -80,12 +76,6 @@ void led_control() {
     digitalWrite(led, HIGH);
   } else{
   	digitalWrite(led, LOW);
-  }
-  if (btn_toggle){
-    digitalWrite(led_sound, HIGH);
-    delay(1000);
-  } else {
-    digitalWrite(led_sound, LOW);
   }
 }
 
